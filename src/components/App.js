@@ -5,8 +5,11 @@ import {
 } from 'react-router-dom';
 
 import SignInPage from './SignIn';
+import Dashboard from './Dashboard';
 
 import * as routes from '../constants/routes';
+
+import withAuthentication from './withAuthentication';
 
 const App = () =>
   <Router>
@@ -15,7 +18,11 @@ const App = () =>
         exact path={routes.SIGN_IN}
         component={() => <SignInPage />}
       />
+      <Route
+        exact path={routes.DASHBOARD}
+        component={() => <Dashboard />}
+      />
     </div>
   </Router>
 
-export default App;
+export default withAuthentication(App);

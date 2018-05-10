@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import { SignUpLink } from './SignUp';
 import { auth } from '../firebase';
 import * as routes from '../constants/routes';
 
 const SignInPage = ({ history }) =>
   <div>
-    <h1>SignIn</h1>
+    <h1>Zaloguj się</h1>
     <SignInForm history={history} />
+    <SignUpLink />
   </div>
 
 const byPropKey = (propertyName, value) => () => ({
@@ -66,16 +68,16 @@ class SignInForm extends Component {
           value={email}
           onChange={event => this.setState(byPropKey('email', event.target.value))}
           type="text"
-          placeholder="Email Address"
+          placeholder="Email"
         />
         <input
           value={password}
           onChange={event => this.setState(byPropKey('password', event.target.value))}
           type="password"
-          placeholder="Password"
+          placeholder="Hasło"
         />
         <button disabled={isInvalid} type="submit">
-          Sign In
+          Zaloguj się
         </button>
 
         { error && <p>{error.message}</p> }
@@ -89,4 +91,3 @@ export default withRouter(SignInPage);
 export {
   SignInForm,
 };
-

@@ -22,8 +22,6 @@ const App = () =>
     <div>
       <Navigation />
 
-      <hr />
-
       <Route
         exact path={routes.SIGN_IN}
         component={() => <SignInPage />}

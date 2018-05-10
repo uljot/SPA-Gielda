@@ -3,7 +3,8 @@ import withAuthorization from './withAuthorization';
 
 const Charts = () =>
   <div>
-    <h1>CHARTS</h1>
+    <h1>Wykresy</h1>
+    <p>Tu będzie duży wykres z billboard.js.</p>
   </div>
 
   const authCondition = (authUser) => !!authUser;

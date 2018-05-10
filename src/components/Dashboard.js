@@ -5,12 +5,10 @@ import SignOutButton from './SignOut';
 
 const Dashboard = () =>
   <div>
-    <h1>Dashboard</h1>
-    <p>The Dashboard is accessible by every signed in user.</p>
-    <p><SignOutButton /></p>
+    <h1>Kokpit</h1>
+    <p>Tutaj będą małe wykresiki.</p>
   </div>
 
 const authCondition = (authUser) => !!authUser;
 
 export default withAuthorization(authCondition)(Dashboard);
-

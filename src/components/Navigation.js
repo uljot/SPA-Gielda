@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import AuthUserContext from './AuthUserContext';
 import SignOutButton from './SignOut';
@@ -16,9 +16,9 @@ const Navigation = () =>
 const NavigationAuth = () => 
   <div>
     <ul>
-      <li><Link to={routes.DASHBOARD}>Kokpit</Link></li>
-      <li><Link to={routes.CHARTS}>Wykresy</Link></li>
-      <li><Link to={routes.RATES}>Kursy</Link></li>
+      <li><NavLink to={routes.DASHBOARD}>Kokpit</NavLink></li>
+      <li><NavLink to={routes.CHARTS}>Wykresy</NavLink></li>
+      <li><NavLink to={routes.RATES}>Kursy</NavLink></li>
       <li><SignOutButton /></li>
     </ul>
   </div>

@@ -15,12 +15,10 @@ const Navigation = () =>
 
 const NavigationAuth = () => 
   <div>
-    <ul>
-      <li><NavLink to={routes.DASHBOARD}>Kokpit</NavLink></li>
-      <li><NavLink to={routes.CHARTS}>Wykresy</NavLink></li>
-      <li><NavLink to={routes.RATES}>Kursy</NavLink></li>
-      <li><SignOutButton /></li>
-    </ul>
+      <NavLink to={routes.DASHBOARD}>Kokpit</NavLink>
+      <NavLink to={routes.CHARTS}>Wykresy</NavLink>
+      <NavLink to={routes.RATES}>Kursy</NavLink>
+      <SignOutButton />
   </div>
 
 const NavigationNonAuth = () => null

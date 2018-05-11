@@ -8,7 +8,6 @@ import * as routes from '../constants/routes';
 var navBar = {
 	backgroundColor: "#000000",
 	textDecoration: "none",
-	color: "#ffffff"
 };
 
 var navRegular = {
@@ -17,7 +16,6 @@ var navRegular = {
 };
 
 var navActive = {
-	textDecoration: "none",
 	color: "#ffffff"
 };
 

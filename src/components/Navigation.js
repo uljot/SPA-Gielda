@@ -31,7 +31,7 @@ const Navigation = () =>
 
 const NavigationAuth = () => 
   <div style={navBar}>
-      <NavLink activeStyle={navActive} style={navRegular} to={routes.DASHBOARD}>Kokpit</NavLink>
+      <NavLink activeStyle={navActive} style={navRegular} to={routes.DASHBOARD}>KOKPIT</NavLink>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.CHARTS}>Wykresy</NavLink>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.RATES}>Kursy</NavLink>
       <SignOut />

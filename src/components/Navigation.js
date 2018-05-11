@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import AuthUserContext from './AuthUserContext';
-import SignOutButton from './SignOut';
+import SignOut from './SignOut';
 import * as routes from '../constants/routes';
 
 const Navigation = () =>
@@ -18,7 +18,7 @@ const NavigationAuth = () =>
       <NavLink to={routes.DASHBOARD}>Kokpit</NavLink>
       <NavLink to={routes.CHARTS}>Wykresy</NavLink>
       <NavLink to={routes.RATES}>Kursy</NavLink>
-      <SignOutButton />
+      <SignOut />
   </div>
 
 const NavigationNonAuth = () => null

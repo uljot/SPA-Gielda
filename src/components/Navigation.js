@@ -1,8 +1,8 @@
 import React from 'react';
+import Firebase from 'firebase';
 import { NavLink } from 'react-router-dom';
 
 import AuthUserContext from './AuthUserContext';
-import SignOut from './SignOut';
 import * as routes from '../constants/routes';
 
 var navBar = {
@@ -42,9 +42,7 @@ const NavigationAuth = () =>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.DASHBOARD}>KOKPIT</NavLink>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.CHARTS}>Wykresy</NavLink>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.RATES}>Kursy</NavLink>
-      <span style={rightSide}>
-		<SignOut />
-	  </span>
+      <NavLink style={rightSide} to={routes.SIGN_IN} onClick={() => Firebase.auth().signOut()}>Wyloguj</NavLink>
       <span style={rightSide}>
 		USERNAME
 	  </span>

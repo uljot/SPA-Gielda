@@ -11,7 +11,6 @@ import Dashboard from './Dashboard';
 import PasswordForgetPage from './PwForget';
 import Charts from './Charts';
 import Rates from './Rates';
-import SignOutPage from './SignOut';
 
 import * as routes from '../constants/routes';
 
@@ -45,10 +44,6 @@ const App = () =>
       <Route
         exact path={routes.RATES}
         component={() => <Rates />}
-      />
-      <Route
-        exact path={routes.SIGN_OUT}
-        component={() => <SignOutPage />}
       />
     </div>
   </Router>

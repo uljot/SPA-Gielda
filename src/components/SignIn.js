@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router'
 
 import { SignUpLink } from './SignUp';
 import { PasswordForgetLink } from './PwForget';
+import AuthUserContext from './AuthUserContext';
 import { auth } from '../firebase';
 import * as routes from '../constants/routes';
+
+const RootPage = () =>
+  <AuthUserContext.Consumer>
+    {authUser => authUser
+      ? <Redirect to={routes.DASHBOARD} />
+      : <SignInPage />
+    }
+  </AuthUserContext.Consumer>
 
 const SignInPage = ({ history }) =>
   <div>
@@ -88,7 +98,7 @@ class SignInForm extends Component {
   }
 }
 
-export default withRouter(SignInPage);
+export default withRouter(RootPage);
 
 export {
   SignInForm,

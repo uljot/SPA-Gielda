@@ -48,7 +48,7 @@ const NavigationAuth = () =>
 		<DataAccess from={"users/" + Firebase.auth().currentUser.uid + "/username"} />
 	  </span>
       <span style={rightSide}>
-		Stan konta:
+		Stan konta: <DataAccess from={"users/" + Firebase.auth().currentUser.uid + "/balance"} /> PLN
 	  </span>
   </div>
 

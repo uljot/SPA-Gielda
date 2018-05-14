@@ -44,12 +44,19 @@ const NavigationAuth = () =>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.CHARTS}>Wykresy</NavLink>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.RATES}>Kursy</NavLink>
       <NavLink style={rightSide} to={routes.SIGN_IN} onClick={() => Firebase.auth().signOut()}>Wyloguj</NavLink>
-      <span style={rightSide}>
-		<DataAccess from={"users/" + Firebase.auth().currentUser.uid + "/username"} />
-	  </span>
-      <span style={rightSide}>
-		Stan konta: <DataAccess from={"users/" + Firebase.auth().currentUser.uid + "/balance"} /> PLN
-	  </span>
+      <AuthUserContext.Consumer>
+		{
+		authUser =>
+			<span>
+			  <span style={rightSide}>
+				<DataAccess from={"users/" + authUser.uid + "/username"} />
+			  </span>
+			  <span style={rightSide}>
+				Stan konta: <DataAccess from={"users/" + authUser.uid + "/balance"} /> PLN
+			  </span>
+			</span>
+		}
+	  </AuthUserContext.Consumer>
   </div>
 
 const NavigationNonAuth = () => null

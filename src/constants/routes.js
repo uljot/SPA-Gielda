@@ -4,4 +4,4 @@ export const DASHBOARD = '/Dashboard';
 export const PASSWORD_FORGET = '/PwForget';
 export const CHARTS = '/Charts';
 export const RATES = '/Rates';
-export const GOODBYE = '/Goodbye';
+export const GOODBYE = '/SignedOut';

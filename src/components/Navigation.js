@@ -6,8 +6,6 @@ import AuthUserContext from './AuthUserContext';
 import * as routes from '../constants/routes';
 import {DataAccess} from './Data';
 
-import { auth } from '../firebase';
-
 var navBar = {
 	paddingTop: "15px",
 	paddingBottom: "15px",

@@ -6,6 +6,8 @@ import AuthUserContext from './AuthUserContext';
 import * as routes from '../constants/routes';
 import {DataAccess} from './Data';
 
+import { auth } from '../firebase';
+
 var navBar = {
 	paddingTop: "15px",
 	paddingBottom: "15px",
@@ -38,12 +40,12 @@ const Navigation = () =>
     }
   </AuthUserContext.Consumer>
 
-const NavigationAuth = () => 
+const NavigationAuth = () =>
   <div style={navBar}>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.DASHBOARD}>KOKPIT</NavLink>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.CHARTS}>Wykresy</NavLink>
       <NavLink activeStyle={navActive} style={navRegular} to={routes.RATES}>Kursy</NavLink>
-      <NavLink style={rightSide} to={routes.SIGN_IN} onClick={() => Firebase.auth().signOut()}>Wyloguj</NavLink>
+      <NavLink style={rightSide} to={routes.GOODBYE} onClick={() => Firebase.auth().signOut()}>Wyloguj</NavLink>
       <AuthUserContext.Consumer>
 		{
 		authUser =>

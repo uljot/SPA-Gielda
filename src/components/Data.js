@@ -7,12 +7,11 @@ export class DataAccess extends Component {
 	
     this.state = {
       data: null,
-	  from: props.from
     };
   }
 
   componentDidMount() {
-    const { from } = this.state;
+    const { from } = this.props;
 	
     Firebase.database().ref(from).on('value', (snapshot) =>
       this.setState(() => ({ data: snapshot.val() }))

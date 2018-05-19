@@ -29,8 +29,9 @@ class Update extends Component {
       while(lastUpdate !== currentDate) {
         lastUpdate = new Date(lastUpdate);
         lastUpdate.setDate(lastUpdate.getDate() + 1);
+        var dayOfTheWeek = lastUpdate.getDay();
         lastUpdate = lastUpdate.toISOString().slice(0, 10);
-        toUpdate.push(lastUpdate);
+        if((dayOfTheWeek !== 0) && (dayOfTheWeek !== 6)) toUpdate.push(lastUpdate);
       }
     }
     return (

@@ -12,6 +12,7 @@ import PasswordForgetPage from './PwForget';
 import Charts from './Charts';
 import Rates from './Rates';
 import Goodbye from './Goodbye';
+import Update from './Update';
 
 import * as routes from '../constants/routes';
 
@@ -21,6 +22,7 @@ const App = () =>
   <Router>
     <div>
       <Navigation />
+      <Update />
 
       <Route
         exact path={routes.SIGN_IN}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Firebase from 'firebase';
 
 import withAuthorization from './withAuthorization';
 
@@ -7,10 +8,22 @@ class Dashboard extends Component {
     super(props);
 
     this.state = {
+      user: null,
+      rates: null
     };
   }
 
   componentDidMount() {
+    Firebase.database().ref("users/" + Firebase.auth().currentUser.uid).on('value', (snapshot) =>
+      this.setState(() => ({ user: snapshot.val() })))
+    Firebase.database().ref("rates").orderByKey().limitToLast(1).on('value', (snapshot) =>
+      this.setState((prevState, props) => {
+        return {
+          user: prevState.user,
+          rates: snapshot.val()[Object.keys(snapshot.val())]
+        };
+      })
+    );
   }
 
   render() {

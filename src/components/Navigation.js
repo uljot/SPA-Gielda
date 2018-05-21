@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Firebase from 'firebase';
 import { NavLink } from 'react-router-dom';
 
 import AuthUserContext from './AuthUserContext';
 import * as routes from '../constants/routes';
-import {DataAccess} from './Data';
 
 var navBar = {
     paddingTop: "15px",
@@ -38,26 +37,42 @@ const Navigation = () =>
     }
   </AuthUserContext.Consumer>
 
-const NavigationAuth = () =>
-  <div style={navBar}>
-      <NavLink activeStyle={navActive} style={navRegular} to={routes.DASHBOARD}>KOKPIT</NavLink>
-      <NavLink activeStyle={navActive} style={navRegular} to={routes.CHARTS}>Wykresy</NavLink>
-      <NavLink activeStyle={navActive} style={navRegular} to={routes.RATES}>Kursy</NavLink>
-      <NavLink style={rightSide} to={routes.GOODBYE} onClick={() => Firebase.auth().signOut()}>Wyloguj</NavLink>
-      <AuthUserContext.Consumer>
-        {
-        authUser =>
-            <span>
-              <span style={rightSide}>
-                <DataAccess from={"users/" + authUser.uid + "/username"} />
-              </span>
-              <span style={rightSide}>
-                Stan konta: <DataAccess from={"users/" + authUser.uid + "/balance"} /> PLN
-              </span>
-            </span>
-        }
-      </AuthUserContext.Consumer>
-  </div>
+class NavigationAuth extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      user: null,
+    };
+  }
+
+  componentDidMount() {
+    Firebase.database().ref("users/" + Firebase.auth().currentUser.uid ).on('value', (snapshot) =>
+      this.setState(() => ({ user: snapshot.val() }))
+    );
+  }
+
+  render() {
+    const { user } = this.state;
+
+    return (
+      <div style={navBar}>
+        <NavLink activeStyle={navActive} style={navRegular} to={routes.DASHBOARD}>KOKPIT</NavLink>
+        <NavLink activeStyle={navActive} style={navRegular} to={routes.CHARTS}>Wykresy</NavLink>
+        <NavLink activeStyle={navActive} style={navRegular} to={routes.RATES}>Kursy</NavLink>
+        <NavLink style={rightSide} to={routes.GOODBYE} onClick={() => Firebase.auth().signOut()}>Wyloguj</NavLink>
+        <span>
+          <span style={rightSide}>
+            {!!user && user.username}
+          </span>
+          <span style={rightSide}>
+            Stan konta: {!!user && user.balance.toLocaleString()} PLN
+          </span>
+        </span>
+      </div>
+    );
+  }
+}
 
 const NavigationNonAuth = () => null
 

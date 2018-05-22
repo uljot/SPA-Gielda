@@ -26,7 +26,8 @@ class Update extends Component {
     if(data) {
       var lastUpdate = Object.keys(data);
       var currentDate = new Date().toISOString().slice(0, 10);
-      while(lastUpdate !== currentDate) {
+      // eslint-disable-next-line
+      while(lastUpdate != currentDate) {
         lastUpdate = new Date(lastUpdate);
         lastUpdate.setDate(lastUpdate.getDate() + 1);
         var dayOfTheWeek = lastUpdate.getDay();

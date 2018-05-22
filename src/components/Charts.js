@@ -42,6 +42,7 @@ const CHART_DATA = {
     rate,
   ],
   type: "line"
+  
 };
 
 class LineChart extends Component {

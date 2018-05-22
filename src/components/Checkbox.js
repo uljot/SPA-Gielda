@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Firebase from 'firebase'
 
 class Checkbox extends Component {
   constructor (props) {
@@ -7,14 +8,54 @@ class Checkbox extends Component {
     this.state = {
       currency: this.props.currency,
       rates: [],
-      checked: false
+      dates: [],
+      checked: false,
+      data: null
     }
     this.handleClick = this.handleClick.bind(this)
   }
+
+  componentDidMount() {
+    Firebase.database().ref("rates").orderByKey().limitToLast(10).on('value', (snapshot) =>
+    {
+      let labels =[
+        'DATA',
+      ]
+      labels =  labels.concat(Object.keys(snapshot.val()))
+
+    let values = []
+
+    for(let date in   snapshot.val()){
+      for(let currency in   snapshot.val()[date]){
+        if(!values[currency])
+          values[currency] = []
+        values[currency].push(snapshot.val()[date][currency].mid)
+      }
+    }
+console.log(values)
+      this.setState((prevState, props) => {
+        return {
+          currency: prevState.currency,
+          rates: prevState.rates,
+          dates: prevState.dates,
+          checked: prevState.checked,
+          data: values
+        };
+      })
+    });
+  }
+
   handleClick () {
     if (this.state.checked === false){
-      axios.get('http://api.nbp.pl/api/exchangerates/rates/a/' + this.state.currency +'/last/10/?format=json')
-        .then(response => this.setState({rates: response.data.rates, checked: true}))
+      this.state.data[this.props.currency]
+      this.setState((prevState, props) => {
+        return {
+          currency: prevState.currency,
+          rates: prevState.rates,
+          dates: prevState.dates,
+          checked: true,
+          data: prevState.data
+        };})
 
       } else {
         this.setState({rates:[], checked: false})

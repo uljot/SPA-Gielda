@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -11,6 +11,8 @@ import Dashboard from './Dashboard';
 import PasswordForgetPage from './PwForget';
 import Charts from './Charts';
 import Rates from './Rates';
+import Goodbye from './Goodbye';
+import Update from './Update';
 
 import * as routes from '../constants/routes';
 
@@ -20,6 +22,7 @@ const App = () =>
   <Router>
     <div>
       <Navigation />
+      <Update />
 
       <Route
         exact path={routes.SIGN_IN}
@@ -44,6 +47,10 @@ const App = () =>
       <Route
         exact path={routes.RATES}
         component={() => <Rates />}
+	  />
+	  <Route
+        exact path={routes.GOODBYE}
+        component={() => <Goodbye />}
       />
     </div>
   </Router>

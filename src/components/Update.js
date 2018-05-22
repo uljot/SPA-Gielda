@@ -34,7 +34,8 @@ class Update extends Component {
         lastUpdate.setDate(lastUpdate.getDate() + 1);
         var dayOfTheWeek = lastUpdate.getDay();
         lastUpdate = lastUpdate.toISOString().slice(0, 10);
-        if((dayOfTheWeek !== 0) && (dayOfTheWeek !== 6)) toUpdate.push(lastUpdate);
+		// eslint-disable-next-line
+        if((dayOfTheWeek != 0) && (dayOfTheWeek != 6)) toUpdate.push(lastUpdate);
       }
     }
     return (

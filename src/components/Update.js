@@ -25,7 +25,9 @@ class Update extends Component {
     
     if(data) {
       var lastUpdate = Object.keys(data);
-      var currentDate = new Date().toISOString().slice(0, 10);
+      var currentDate = new Date();
+	  if(currentDate.getHours() < 11) currentDate.setDate(currentDate.getDate() - 1);
+	  currentDate = currentDate.toISOString().slice(0, 10);
       // eslint-disable-next-line
       while(lastUpdate != currentDate) {
         lastUpdate = new Date(lastUpdate);

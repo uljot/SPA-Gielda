@@ -6,6 +6,7 @@ import { SignUpLink } from './SignUp';
 import { PasswordForgetLink } from './PwForget';
 import AuthUserContext from './AuthUserContext';
 import { auth } from '../firebase';
+import { providerGoogle } from '../firebase/firebase';
 import * as routes from '../constants/routes';
 
 const RootPage = () =>
@@ -22,6 +23,7 @@ const SignInPage = ({ history }) =>
     <SignInForm history={history} />
     <PasswordForgetLink />
     <SignUpLink />
+    <SignInGoogle />
   </div>
 
 const byPropKey = (propertyName, value) => () => ({
@@ -94,6 +96,41 @@ class SignInForm extends Component {
 
         { error && <p>{error.message}</p> }
       </form>
+    );
+  }
+}
+
+class SignInGoogle extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { ...INITIAL_STATE };
+  }
+
+  handleClick = (event) => {
+    const {
+      history,
+    } = this.props;
+
+    auth.doSignInWithGoogle()
+      .then(() => {
+        this.setState(() => ({ ...INITIAL_STATE }));
+        history.push(routes.DASHBOARD);
+      })
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      });
+
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <button onClick={this.handleClick}>
+          Login with Google
+        </button>
+      </div>
     );
   }
 }

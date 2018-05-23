@@ -13,6 +13,7 @@ import Charts from './Charts';
 import Rates from './Rates';
 import Goodbye from './Goodbye';
 import Update from './Update';
+import Load from './Load';
 
 import * as routes from '../constants/routes';
 
@@ -21,8 +22,9 @@ import withAuthentication from './withAuthentication';
 const App = () =>
   <Router>
     <div>
-      <Navigation />
+	  <Load />
       <Update />
+      <Navigation />
 
       <Route
         exact path={routes.SIGN_IN}

@@ -1,40 +1,18 @@
 import React, { Component } from 'react';
-import Firebase from 'firebase';
 
 import withAuthorization from './withAuthorization';
+import { Load } from './Load';
 
-class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      user: null,
-      rates: null
-    };
-  }
-
-  componentDidMount() {
-    Firebase.database().ref("users/" + Firebase.auth().currentUser.uid).on('value', (snapshot) =>
-      this.setState(() => ({ user: snapshot.val() })))
-    Firebase.database().ref("rates").orderByKey().limitToLast(1).on('value', (snapshot) =>
-      this.setState((prevState, props) => {
-        return {
-          user: prevState.user,
-          rates: snapshot.val()[Object.keys(snapshot.val())]
-        };
-      })
-    );
-  }
-
+class Dashboard extends Load {
   render() {
     const { user } = this.state;
-    const { rates } = this.state;
+    const { currentRates } = this.state;
 
-    var sums = user ? rates ?
+    var sums = user ? currentRates ?
       Object.keys(user.wallet).reduce(function (result, item) {
         return {
           value: result.value + user.wallet[item].value,
-          sellValue: result.sellValue + (rates[item].bid ? rates[item].bid * user.wallet[item].amount : rates[item].mid * user.wallet[item].amount)
+          sellValue: result.sellValue + (currentRates[item].bid ? currentRates[item].bid * user.wallet[item].amount : currentRates[item].mid * user.wallet[item].amount)
         };
       }, {value: 0, sellValue: 0})
     : null : null;
@@ -65,16 +43,16 @@ class Dashboard extends Component {
               </tr>
             </thead>
             <tbody>
-            {user ? rates ?
+            {user ? currentRates ?
               Object.keys(user.wallet).map(function(key, index) {
                 return user.wallet[key].amount > 0 ?
                   <TableBuilder key={index}
-                                name={rates[key].currency}
+                                name={currentRates[key].currency}
                                 code={key}
-                                mid={rates[key].mid}
+                                mid={currentRates[key].mid}
                                 value={user.wallet[key].value}
                                 amount={user.wallet[key].amount}
-                                sellValue={rates[key].bid ? rates[key].bid * user.wallet[key].amount : rates[key].mid * user.wallet[key].amount}
+                                sellValue={currentRates[key].bid ? currentRates[key].bid * user.wallet[key].amount : currentRates[key].mid * user.wallet[key].amount}
                   />
                   : null
               })

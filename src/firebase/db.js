@@ -9,6 +9,3 @@ export const doCreateUser = (id, username, email, balance, wallet) =>
     balance,
     wallet,
   });
-
-export const onceGetUsers = () =>
-  db.ref('users').once('value');

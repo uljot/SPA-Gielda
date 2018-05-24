@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Firebase from 'firebase';
 import { NavLink } from 'react-router-dom';
 
 import AuthUserContext from './AuthUserContext';
 import * as routes from '../constants/routes';
+import { Load } from './Load';
 
 var navBar = {
     paddingTop: "15px",
@@ -37,20 +38,7 @@ const Navigation = () =>
     }
   </AuthUserContext.Consumer>
 
-class NavigationAuth extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      user: null,
-    };
-  }
-
-  componentDidMount() {
-    Firebase.database().ref("users/" + Firebase.auth().currentUser.uid ).on('value', (snapshot) =>
-      this.setState(() => ({ user: snapshot.val() }))
-    );
-  }
+class NavigationAuth extends Load {
 
   render() {
     const { user } = this.state;

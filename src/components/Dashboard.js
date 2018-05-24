@@ -66,7 +66,7 @@ class Dashboard extends Load {
                 <td>{!!sums && sums.value.toLocaleString('pl-PL', { minimumFractionDigits: 2 })}</td>
                 <td></td>
                 <td>{!!sums && sums.sellValue.toLocaleString('pl-PL', { minimumFractionDigits: 2 })}</td>
-                <td>{!!sums && (sums.sellValue - sums.value).toLocaleString('pl-PL', { minimumFractionDigits: 2 })}({!!sums && (((sums.sellValue / sums.value) - 1) * 100).toFixed(2).replace(".",",")}%)</td>
+                <td>{!!sums && (sums.sellValue - sums.value).toLocaleString('pl-PL', { minimumFractionDigits: 2 })}({!!sums && (!isNaN(sums.sellValue / sums.value) ? (((sums.sellValue / sums.value) - 1) * 100).toFixed(2).replace(".",",") : "0,00")}%)</td>
               </tr>
             </tfoot>
           </table>

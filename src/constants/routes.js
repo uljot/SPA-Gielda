@@ -5,3 +5,9 @@ export const PASSWORD_FORGET = '/PwForget';
 export const CHARTS = '/Charts';
 export const RATES = '/Rates';
 export const GOODBYE = '/SignedOut';
+export const noAuthRoutes = [
+                             "/",
+                             "/PwForget",
+                             "/SignUp",
+						     "/SignedOut"
+                            ]

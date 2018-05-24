@@ -11,7 +11,7 @@ const withAuthorization = (authCondition) => (Component) => {
       return (
         <AuthUserContext.Consumer>
           {// eslint-disable-next-line
-		  authUser => authUser ? <Component /> : window.location.pathname == "/SignedOut" || window.location.pathname == "/" ? null : <Redirect to={routes.SIGN_IN} />}
+		  authUser => authUser ? <Component /> : routes.noAuthRoutes.includes(window.location.pathname) ? null : <Redirect to={routes.SIGN_IN} />}
         </AuthUserContext.Consumer>
       );
     }

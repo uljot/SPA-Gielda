@@ -13,13 +13,15 @@ class Update extends Load {
       var lastUpdate = dates.slice(-1);
       var currentDate = new Date();
 	  if(currentDate.getHours() < 11) currentDate.setDate(currentDate.getDate() - 1);
+	  currentDate.setMinutes(currentDate.getMinutes() - currentDate.getTimezoneOffset());
 	  currentDate = currentDate.toISOString().slice(0, 10);
       // eslint-disable-next-line
       while(lastUpdate != currentDate) {
         lastUpdate = new Date(lastUpdate);
         lastUpdate.setDate(lastUpdate.getDate() + 1);
         var dayOfTheWeek = lastUpdate.getDay();
-        lastUpdate = lastUpdate.toISOString().slice(0, 10);
+        lastUpdate.setMinutes(lastUpdate.getMinutes() - lastUpdate.getTimezoneOffset());
+		lastUpdate = lastUpdate.toISOString().slice(0, 10);
 		// eslint-disable-next-line
         if((dayOfTheWeek != 0) && (dayOfTheWeek != 6)) toUpdate.push(lastUpdate);
       }

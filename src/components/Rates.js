@@ -10,11 +10,26 @@ class Rates extends Load {
 	return (
       <div>
         <style> {`
-          table, td, th {
-            border: 2px ridge white;
-          }
           table {
             width: 100%;
+			border-spacing: 0px;
+			padding: 4px;
+          }
+		  th, thead tr {
+		    border: 2px ridge white;
+		  }
+          .rise, .rise td {
+            background-color: #00BB00;
+	        border-bottom: 2px double #008800;
+          }
+          .drop, .drop td {
+            background-color: #BB0000;
+            border-bottom: 2px double #880000;
+			color: #BBBBBB;
+          }
+          .noChange, .noChange td {
+            background-color: #BBBBBB;
+            border-bottom: 2px double #008800;
           }
         `}</style>
         <div>
@@ -65,15 +80,17 @@ class TableBuilder extends Component {
     const { bid } = this.props;
     const { ask } = this.props;
 
+	let midDiff = mid - oldMid;
+
     return (
-      <tr>
+      <tr className={midDiff > 0 ? "rise" : midDiff < 0 ? "drop" : "noChange"}>
         <td>#</td>
         <td>{name}</td>
         <td>{code}</td>
         <td>{mid.toString().replace(".",",")}</td>
         <td>{bid ? bid.toString().replace(".",",") : "B/D"}</td>
         <td>{ask ? ask.toString().replace(".",",") : "B/D"}</td>
-        <td>{(mid - oldMid).toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 6})}({((mid / oldMid - 1) * 100).toFixed(2).replace(".",",")}%)</td>
+        <td>{midDiff.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 6})}({((mid / oldMid - 1) * 100).toFixed(2).replace(".",",")}%)</td>
         <td>#</td>
         <td>#</td>
         <td>#</td>

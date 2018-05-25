@@ -29,7 +29,7 @@ class Rates extends Load {
                 <th>Kurs średni</th>
                 <th>Kurs zakupu</th>
                 <th>Kurs sprzedaży</th>
-                <th>Zmiana procentowa</th>
+                <th>Zmiana</th>
                 <th>Transakcja</th>
                 <th>Ilość</th>
                 <th>Kwota</th>

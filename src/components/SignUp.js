@@ -20,6 +20,7 @@ const INITIAL_STATE = {
   passwordTwo: '',
   balance: 100000.00,
   wallet: {"USD": {"amount": 0, "value": 0}},
+  follow: {"USD": true},
   error: null,
 };
 
@@ -41,6 +42,7 @@ class SignUpForm extends Component {
       passwordOne,
       balance,
       wallet,
+      follow,
     } = this.state;
 
     const {
@@ -50,7 +52,7 @@ class SignUpForm extends Component {
     auth.doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
         // Create a user in your own accessible Firebase Database too
-        db.doCreateUser(authUser.uid, username, email, balance, wallet)
+        db.doCreateUser(authUser.uid, username, email, balance, wallet, follow)
           .then(() => {
             this.setState(() => ({ ...INITIAL_STATE }));
             history.push(routes.DASHBOARD);

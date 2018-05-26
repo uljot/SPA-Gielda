@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Firebase from 'firebase';
 
 import withAuthorization from './withAuthorization';
 import { Load } from './Load';
@@ -7,6 +8,7 @@ class Rates extends Load {
   render() {
     const { currentRates } = this.state;
     const { lastRates } = this.state;
+    const { user } = this.state;
 	return (
       <div>
         <style> {`
@@ -51,7 +53,7 @@ class Rates extends Load {
               </tr>
             </thead>
             <tbody>
-			  {currentRates ? lastRates ?
+			  {currentRates ? lastRates ? user ?
                 Object.keys(currentRates).map(function(key, index) {
                   return <TableBuilder key={index}
                                        name={currentRates[key].currency}
@@ -60,9 +62,11 @@ class Rates extends Load {
                                        oldMid={lastRates[key].mid}
                                        bid={currentRates[key].bid}
                                        ask={currentRates[key].ask}
+                                       follow={user.follow[key] ? user.follow[key] : null}
+									   uid={user.uid}
                          />
                 })
-            : null : null}
+            : null : null : null}
             </tbody>
           </table>
         </div>
@@ -79,12 +83,22 @@ class TableBuilder extends Component {
     const { oldMid } = this.props;
     const { bid } = this.props;
     const { ask } = this.props;
+    var { follow } = this.props;
+    const { uid } = this.props;
 
 	let midDiff = mid - oldMid;
 
+    var onCheckboxAction = () => {
+	  if(follow) {
+	    Firebase.database().ref("users/" + uid + "/follow/" + code).remove();
+	  } else {
+	    Firebase.database().ref("users/" + uid + "/follow/" + code).set(true);
+	  }
+	}
+
     return (
       <tr className={midDiff > 0 ? "rise" : midDiff < 0 ? "drop" : "noChange"}>
-        <td>#</td>
+        <td><input type="checkbox" onClick={() => onCheckboxAction()} defaultChecked={follow} /></td>
         <td>{name}</td>
         <td>{code}</td>
         <td>{mid.toString().replace(".",",")}</td>

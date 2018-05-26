@@ -54,17 +54,32 @@ class Rates extends Load {
             </thead>
             <tbody>
 			  {currentRates ? lastRates ? user ?
-                Object.keys(currentRates).map(function(key, index) {
-                  return <TableBuilder key={index}
+                Object.keys(user.follow).map(function(key, index) {
+                  return <TableBuilder key={key}
                                        name={currentRates[key].currency}
                                        code={key}
                                        mid={currentRates[key].mid}
                                        oldMid={lastRates[key].mid}
                                        bid={currentRates[key].bid}
                                        ask={currentRates[key].ask}
-                                       follow={user.follow[key] ? user.follow[key] : null}
+                                       follow={true}
 									   uid={user.uid}
                          />
+                })
+            : null : null : null}
+			  {currentRates ? lastRates ? user ?
+                Object.keys(currentRates).map(function(key, index) {
+                  return user.follow[key] ? null
+                                          : <TableBuilder key={key}
+                                                          name={currentRates[key].currency}
+                                                          code={key}
+                                                          mid={currentRates[key].mid}
+                                                          oldMid={lastRates[key].mid}
+                                                          bid={currentRates[key].bid}
+                                                          ask={currentRates[key].ask}
+                                                          follow={false}
+									                      uid={user.uid}
+                                            />
                 })
             : null : null : null}
             </tbody>

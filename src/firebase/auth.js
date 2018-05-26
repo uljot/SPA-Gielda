@@ -27,10 +27,6 @@ export const doSignInWithGoogle = () =>
     // ...
   });
 
-// Sign out
-export const doSignOut = () =>
-  auth.signOut();
-
 // Password Reset
 export const doPasswordReset = (email) =>
   auth.sendPasswordResetEmail(email);

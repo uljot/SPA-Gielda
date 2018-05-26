@@ -1,38 +1,29 @@
-import React, { Component } from 'react';
-import Firebase from 'firebase';
+import React from 'react';
 
 import withAuthorization from './withAuthorization';
 import NBPFetch from './NBPFetch';
+import { Load } from './Load';
 
-class Update extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      data: null,
-    };
-  }
-
-  componentDidMount() {
-    Firebase.database().ref("rates").orderByKey().limitToLast(1).on('value', (snapshot) =>
-      this.setState(() => ({ data: snapshot.val() }))
-    );
-  }
-
+class Update extends Load {
   render() {
-    const { data } = this.state;
+    const { dates } = this.state;
     var toUpdate = [];
     
-    if(data) {
-      var lastUpdate = Object.keys(data);
-      var currentDate = new Date().toISOString().slice(0, 10);
+    if(dates) {
+      var lastUpdate = dates.slice(-1);
+      var currentDate = new Date();
+	  if(currentDate.getHours() < 11) currentDate.setDate(currentDate.getDate() - 1);
+	  currentDate.setMinutes(currentDate.getMinutes() - currentDate.getTimezoneOffset());
+	  currentDate = currentDate.toISOString().slice(0, 10);
       // eslint-disable-next-line
       while(lastUpdate != currentDate) {
         lastUpdate = new Date(lastUpdate);
         lastUpdate.setDate(lastUpdate.getDate() + 1);
         var dayOfTheWeek = lastUpdate.getDay();
-        lastUpdate = lastUpdate.toISOString().slice(0, 10);
-        if((dayOfTheWeek !== 0) && (dayOfTheWeek !== 6)) toUpdate.push(lastUpdate);
+        lastUpdate.setMinutes(lastUpdate.getMinutes() - lastUpdate.getTimezoneOffset());
+		lastUpdate = lastUpdate.toISOString().slice(0, 10);
+		// eslint-disable-next-line
+        if((dayOfTheWeek != 0) && (dayOfTheWeek != 6)) toUpdate.push(lastUpdate);
       }
     }
     return (

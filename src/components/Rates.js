@@ -105,6 +105,18 @@ class Rates extends Load {
 }
 
 class TableBuilder extends Component {
+  constructor(props) {
+    super(props);
+    let midDiff = props.mid - props.oldMid;
+    let rowClassName = midDiff > 0 ? "rise" : midDiff < 0 ? "drop" : "noChange";
+    this.state = {
+	  midDiff: midDiff,
+	  rowClassName: rowClassName,
+	  selectClassName: rowClassName.concat(" formItem"),
+	  numberFieldClassName: (midDiff > 0 ? "rise riseNumberField" : midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem")
+    }
+  }
+
   render() {
     const { name } = this.props;
     const { code } = this.props;
@@ -112,10 +124,8 @@ class TableBuilder extends Component {
     const { oldMid } = this.props;
     const { bid } = this.props;
     const { ask } = this.props;
-    var { follow } = this.props;
+    const { follow } = this.props;
     const { uid } = this.props;
-
-	let midDiff = mid - oldMid;
 
     var onCheckboxAction = () => {
 	  if(follow) {
@@ -126,22 +136,22 @@ class TableBuilder extends Component {
 	}
 
     return (
-      <tr className={midDiff > 0 ? "rise" : midDiff < 0 ? "drop" : "noChange"}>
+      <tr className={this.state.rowClassName}>
         <td><input type="checkbox" className={"formItem"} onClick={() => onCheckboxAction()} defaultChecked={follow} /></td>
         <td>{name}</td>
         <td>{code}</td>
         <td>{mid.toString().replace(".",",")}</td>
         <td>{bid ? bid.toString().replace(".",",") : "B/D"}</td>
         <td>{ask ? ask.toString().replace(".",",") : "B/D"}</td>
-        <td>{midDiff.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 6})}({((mid / oldMid - 1) * 100).toFixed(2).replace(".",",")}%)</td>
+        <td>{this.state.midDiff.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 6})}({((mid / oldMid - 1) * 100).toFixed(2).replace(".",",")}%)</td>
         <td>
-		  <select className={(midDiff > 0 ? "rise" : midDiff < 0 ? "drop" : "noChange").concat(" formItem")}>
+		  <select className={this.state.selectClassName}>
 		    <option value="No Action">Brak</option>
             <option value="Buy">Kup</option>
             <option value="Sell">Sprzedaj</option>
           </select>
 		</td>
-        <td><input type="number" min="1" max="99999999" className={(midDiff > 0 ? "rise riseNumberField" : midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem")} /></td>
+        <td><input type="number" min="1" max="99999999" className={this.state.numberFieldClassName} /></td>
         <td>#</td>
       </tr>
     );

@@ -73,6 +73,7 @@ class Rates extends Load {
                 <th>Transakcja</th>
                 <th>Ilość</th>
                 <th>Kwota</th>
+                <th>*</th>
               </tr>
             </thead>
             <tbody>
@@ -87,6 +88,8 @@ class Rates extends Load {
                                        ask={currentRates[key].ask}
                                        follow={true}
 									   uid={user.uid}
+									   currentAmount={user.wallet[key] ? user.wallet[key].amount : 0}
+									   currentValue={user.wallet[key] ? user.wallet[key].value : 0}
                          />
                 })
             : null : null : null}
@@ -102,6 +105,8 @@ class Rates extends Load {
                                                           ask={currentRates[key].ask}
                                                           follow={false}
 									                      uid={user.uid}
+									                      currentAmount={user.wallet[key] ? user.wallet[key].amount : 0}
+									                      currentValue={user.wallet[key] ? user.wallet[key].value : 0}
                                             />
                 })
             : null : null : null}
@@ -123,6 +128,7 @@ class TableBuilder extends Component {
 	  midDiff: midDiff,
 	  inputDisabled: true,
 	  checkboxDisabled: false,
+	  numberField: "",
 	  valueField: "",
 	  rowClassName: rowClassName,
 	  selectClassName: rowClassName.concat(" formItem"),
@@ -140,6 +146,8 @@ class TableBuilder extends Component {
     const { ask } = this.props;
     const { follow } = this.props;
     const { uid } = this.props;
+    const { currentAmount } = this.props;
+    const { currentValue } = this.props;
 
     var onCheckboxAction = () => {
 	  if(follow) {
@@ -147,6 +155,15 @@ class TableBuilder extends Component {
 	  } else {
 	    Firebase.database().ref("users/" + uid + "/follow/" + code).set(true);
 	  }
+	}
+
+    var onButtonAction = () => {
+	  let result;
+	  if(bid) {
+	    if(this.state.rowClassName === "buy") result = this.state.numberField * ask;
+	    else if(this.state.rowClassName === "sell") result = this.state.numberField * bid;
+	  } else result = this.state.numberField * mid;
+	  if(this.state.rowClassName === "buy") Firebase.database().ref("users/" + uid + "/wallet/" + code).set({amount:currentAmount+Number.parseFloat(this.state.numberField),value:currentValue+result)});
 	}
 
     var transactionChange = (event) => {
@@ -185,6 +202,7 @@ class TableBuilder extends Component {
 
     var numberFieldChange = (event) => {
 	  let result;
+	  this.setState({numberField: event.target.value});
 	  if(bid) {
 	    if(this.state.rowClassName === "buy") result = event.target.value * ask;
 	    else if(this.state.rowClassName === "sell") result = event.target.value * bid;
@@ -218,6 +236,7 @@ class TableBuilder extends Component {
 		</td>
         <td><input type="number" min="1" max="99999999" onChange={(event) => numberFieldChange(event)} disabled={this.state.inputDisabled} className={this.state.numberFieldClassName} /></td>
         <td><input type="text" disabled={true} className={this.state.valueFieldClassName} value={this.state.valueField} /></td>
+        <td><input type="button" value="Wykonaj" className={this.state.rowClassName} disabled={this.state.inputDisabled} onClick={() => onButtonAction()} /></td>
       </tr>
     );
   }

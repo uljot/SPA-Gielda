@@ -33,6 +33,20 @@ class Rates extends Load {
             background-color: #BBBBBB;
             border-bottom: 2px double #008800;
           }
+		  .formItem {
+            margin:auto;
+            display:block;
+		  }
+		  .dropNumberField {
+		    font-weight: 999;
+          }
+		  .riseNumberField {
+		    font-weight: bold;
+          }
+		  .numberField {
+			letter-spacing: 1px;
+			padding-left: 2px;
+          }
         `}</style>
         <div>
         </div>
@@ -113,15 +127,21 @@ class TableBuilder extends Component {
 
     return (
       <tr className={midDiff > 0 ? "rise" : midDiff < 0 ? "drop" : "noChange"}>
-        <td><input type="checkbox" onClick={() => onCheckboxAction()} defaultChecked={follow} /></td>
+        <td><input type="checkbox" className={"formItem"} onClick={() => onCheckboxAction()} defaultChecked={follow} /></td>
         <td>{name}</td>
         <td>{code}</td>
         <td>{mid.toString().replace(".",",")}</td>
         <td>{bid ? bid.toString().replace(".",",") : "B/D"}</td>
         <td>{ask ? ask.toString().replace(".",",") : "B/D"}</td>
         <td>{midDiff.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 6})}({((mid / oldMid - 1) * 100).toFixed(2).replace(".",",")}%)</td>
-        <td>#</td>
-        <td>#</td>
+        <td>
+		  <select className={(midDiff > 0 ? "rise" : midDiff < 0 ? "drop" : "noChange").concat(" formItem")}>
+		    <option value="No Action">Brak</option>
+            <option value="Buy">Kup</option>
+            <option value="Sell">Sprzedaj</option>
+          </select>
+		</td>
+        <td><input type="number" min="1" max="99999999" className={(midDiff > 0 ? "rise riseNumberField" : midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem")} /></td>
         <td>#</td>
       </tr>
     );

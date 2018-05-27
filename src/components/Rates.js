@@ -26,8 +26,18 @@ class Rates extends Load {
           }
           .drop, .drop td {
             background-color: #BB0000;
-            border-bottom: 2px double #880000;
+            border-bottom: 2px double #FF6666;
 			color: #BBBBBB;
+          }
+          .buy, .buy td {
+            background-color: #FFD966;
+            border-bottom: 2px double #D19D00;
+			color: #000000;
+          }
+          .sell, .sell td {
+            background-color: #0000FF;
+            border-bottom: 2px double #519480;
+			color: #9AC7BF;
           }
           .noChange, .noChange td {
             background-color: #BBBBBB;
@@ -40,10 +50,8 @@ class Rates extends Load {
 		  .dropNumberField {
 		    font-weight: 999;
           }
-		  .riseNumberField {
-		    font-weight: bold;
-          }
 		  .numberField {
+		    font-weight: bold;
 			letter-spacing: 1px;
 			padding-left: 2px;
           }
@@ -111,9 +119,11 @@ class TableBuilder extends Component {
     let rowClassName = midDiff > 0 ? "rise" : midDiff < 0 ? "drop" : "noChange";
     this.state = {
 	  midDiff: midDiff,
+	  inputDisabled: true,
+	  checkboxDisabled: false,
 	  rowClassName: rowClassName,
 	  selectClassName: rowClassName.concat(" formItem"),
-	  numberFieldClassName: (midDiff > 0 ? "rise riseNumberField" : midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem")
+	  numberFieldClassName: (midDiff > 0 ? "rise" : midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem")
     }
   }
 
@@ -135,9 +145,40 @@ class TableBuilder extends Component {
 	  }
 	}
 
+    var transactionChange = (event) => {
+	  switch(event.target.value) {
+	    case "No Action":
+		  this.setState({inputDisabled: true,
+		                 checkboxDisabled: false,
+						 rowClassName: this.state.midDiff > 0 ? "rise" : this.state.midDiff < 0 ? "drop" : "noChange",
+						 selectClassName: (this.state.midDiff > 0 ? "rise" : this.state.midDiff < 0 ? "drop" : "noChange").concat(" formItem"),
+						 numberFieldClassName: (this.state.midDiff > 0 ? "rise riseNumberField" : this.state.midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem")
+						});
+		  break;
+		case "Buy":
+		  this.setState({inputDisabled: false,
+		                 checkboxDisabled: true,
+						 rowClassName: "buy",
+						 selectClassName: "buy".concat(" formItem"),
+						 numberFieldClassName: "buy".concat(" numberField formItem")
+						});
+		  break;
+		case "Sell":
+		  this.setState({inputDisabled: false,
+		                 checkboxDisabled: true,
+						 rowClassName: "sell",
+						 selectClassName: "sell".concat(" formItem"),
+						 numberFieldClassName: "sell".concat(" numberField formItem")
+						});
+		  break;
+		default:
+		  break;
+	  }
+	}
+
     return (
       <tr className={this.state.rowClassName}>
-        <td><input type="checkbox" className={"formItem"} onClick={() => onCheckboxAction()} defaultChecked={follow} /></td>
+        <td><input type="checkbox" className={"formItem"} onClick={() => onCheckboxAction()} defaultChecked={follow} disabled={this.state.checkboxDisabled} /></td>
         <td>{name}</td>
         <td>{code}</td>
         <td>{mid.toString().replace(".",",")}</td>
@@ -145,13 +186,13 @@ class TableBuilder extends Component {
         <td>{ask ? ask.toString().replace(".",",") : "B/D"}</td>
         <td>{this.state.midDiff.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 6})}({((mid / oldMid - 1) * 100).toFixed(2).replace(".",",")}%)</td>
         <td>
-		  <select className={this.state.selectClassName}>
+		  <select onChange={(event) => transactionChange(event)} className={this.state.selectClassName}>
 		    <option value="No Action">Brak</option>
             <option value="Buy">Kup</option>
             <option value="Sell">Sprzedaj</option>
           </select>
 		</td>
-        <td><input type="number" min="1" max="99999999" className={this.state.numberFieldClassName} /></td>
+        <td><input type="number" min="1" max="99999999" disabled={this.state.inputDisabled} className={this.state.numberFieldClassName} /></td>
         <td>#</td>
       </tr>
     );

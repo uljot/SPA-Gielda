@@ -54,7 +54,7 @@ class NavigationAuth extends Load {
             {!!user && user.username}
           </span>
           <span style={rightSide}>
-            Stan konta: {!!user && user.balance.toLocaleString()} PLN
+            Stan konta: {!!user && user.balance.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} PLN
           </span>
         </span>
       </div>

@@ -90,6 +90,7 @@ class Rates extends Load {
 									   uid={user.uid}
 									   currentAmount={user.wallet[key] ? user.wallet[key].amount : 0}
 									   currentValue={user.wallet[key] ? user.wallet[key].value : 0}
+									   currentBalance={user.balance}
                          />
                 })
             : null : null : null}
@@ -107,6 +108,7 @@ class Rates extends Load {
 									                      uid={user.uid}
 									                      currentAmount={user.wallet[key] ? user.wallet[key].amount : 0}
 									                      currentValue={user.wallet[key] ? user.wallet[key].value : 0}
+									                      currentBalance={user.balance}
                                             />
                 })
             : null : null : null}
@@ -148,6 +150,7 @@ class TableBuilder extends Component {
     const { uid } = this.props;
     const { currentAmount } = this.props;
     const { currentValue } = this.props;
+    const { currentBalance } = this.props;
 
     var onCheckboxAction = () => {
 	  if(follow) {
@@ -159,11 +162,36 @@ class TableBuilder extends Component {
 
     var onButtonAction = () => {
 	  let result;
+	  let nbField = Number.parseFloat(this.state.numberField);
 	  if(bid) {
 	    if(this.state.rowClassName === "buy") result = this.state.numberField * ask;
 	    else if(this.state.rowClassName === "sell") result = this.state.numberField * bid;
 	  } else result = this.state.numberField * mid;
-	  if(this.state.rowClassName === "buy") Firebase.database().ref("users/" + uid + "/wallet/" + code).set({amount:currentAmount+Number.parseFloat(this.state.numberField),value:currentValue+result)});
+	  if(this.state.rowClassName === "buy") {
+	    if(currentBalance >= result) {
+		  let newBalance = currentBalance - result;
+		  let newAmount = currentAmount+nbField;
+		  let newValue = currentValue+result;
+		  Firebase.database().ref("users/" + uid + "/balance").set(newBalance);
+		  Firebase.database().ref("users/" + uid + "/wallet/" + code).set({amount:newAmount,value:newValue});
+		} else this.setState({valueField: "Brak funduszy"});
+	  }
+	  else if(this.state.rowClassName === "sell") {
+	    if(nbField > currentAmount) this.setState({valueField: "Nie masz tyle"});
+		// eslint-disable-next-line
+		else if(nbField == currentAmount) {
+		  let newBalance = currentBalance + result;
+		  Firebase.database().ref("users/" + uid + "/balance").set(newBalance);
+		  Firebase.database().ref("users/" + uid + "/wallet/" + code).set({amount:0,value:0});
+		}  
+		else {
+		  let newBalance = currentBalance + result;
+		  let newAmount = currentAmount-nbField;
+		  let newValue = currentValue*((currentAmount-nbField)/currentAmount);
+		  Firebase.database().ref("users/" + uid + "/balance").set(newBalance);
+		  Firebase.database().ref("users/" + uid + "/wallet/" + code).set({amount:newAmount,value:newValue});
+		}  
+	  }
 	}
 
     var transactionChange = (event) => {

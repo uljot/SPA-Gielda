@@ -40,13 +40,13 @@ Aby korzystać z aplikacji, niezbędna jest rejestracja lub zalogowanie się prz
 | :------------- |-------------:|
 | Prototyp    | 7 |
 | Logowanie z utworzeniem konta     | 9 |
-| Obsługa NBP API | 4 |
-| Pobieranie/dodawanie danych do Firebase  | 10 |
-| Aktualizowanie danych z API w Firebase  | 5 |
+| Obsługa NBP API | 14 |
+| Pobieranie/dodawanie danych do Firebase  | 12 |
+| Aktualizowanie danych z API w Firebase  | 12 |
 | Rejestracja użytkownika | 5,5  |
-| Ekran i obsługa transakcji | 45,5 |
-| Kokpit | 14,5  |
-| **RAZEM** | 100,5  |
+| Ekran i obsługa transakcji | 30,5 |
+| Kokpit | 24,5  |
+| **RAZEM** | 115,5  |
 
 **Katarzyna Suder**
 

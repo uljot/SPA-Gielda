@@ -16,4 +16,4 @@ Aby korzystać z aplikacji, niezbędna jest rejestracja lub zalogowanie się prz
 
 ## Linki
 
-- Trello: https://trello.com/b/U2XojXtd/spa-gie%C5%82da
+- Trello: <https://trello.com/b/U2XojXtd/spa-gie%C5%82da>

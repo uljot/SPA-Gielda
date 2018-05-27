@@ -20,11 +20,11 @@ Aby korzystać z aplikacji, niezbędna jest rejestracja lub zalogowanie się prz
 
 ## Prototyp
 
-![Prototyp](../src/images/SPA_prototyp.jpg?raw=true "Prototyp")
+![Prototyp](https://github.com/uljot/SPA-Gielda/blob/master/src/images/SPA_prototyp.png?raw=true "Prototyp")
 
 ## Rozkład pracy
 
-Kamil Koterla
+**Kamil Koterla**
 
 | Zadanie  | Czas |
 | :------------- |-------------:|
@@ -34,7 +34,7 @@ Kamil Koterla
 | Strona internetowa | 3  |
 | **RAZEM** | 23  |
 
-Aleksander Lorenc
+**Aleksander Lorenc**
 
 | Zadanie  | Czas |
 | :------------- |-------------:|
@@ -48,7 +48,7 @@ Aleksander Lorenc
 | Kokpit | 14,5  |
 | **RAZEM** | 100,5  |
 
-Katarzyna Suder
+**Katarzyna Suder**
 
 | Zadanie  | Czas |
 | :------------- |-------------:|
@@ -58,7 +58,7 @@ Katarzyna Suder
 | Obsługa wykresów z Billboardjs      | 18  |
 | **RAZEM** | 29  |
 
-Joanna Ulman
+**Joanna Ulman**
 
 | Zadanie  | Czas |
 | :------------- |-------------:|

@@ -55,6 +55,9 @@ class Rates extends Load {
 			letter-spacing: 1px;
 			padding-left: 2px;
           }
+		  .valueField {
+			border-style: none;
+          }
         `}</style>
         <div>
           <table>
@@ -70,6 +73,7 @@ class Rates extends Load {
                 <th>Transakcja</th>
                 <th>Ilość</th>
                 <th>Kwota</th>
+                <th>*</th>
               </tr>
             </thead>
             <tbody>
@@ -84,6 +88,9 @@ class Rates extends Load {
                                        ask={currentRates[key].ask}
                                        follow={true}
 									   uid={user.uid}
+									   currentAmount={user.wallet[key] ? user.wallet[key].amount : 0}
+									   currentValue={user.wallet[key] ? user.wallet[key].value : 0}
+									   currentBalance={user.balance}
                          />
                 })
             : null : null : null}
@@ -99,6 +106,9 @@ class Rates extends Load {
                                                           ask={currentRates[key].ask}
                                                           follow={false}
 									                      uid={user.uid}
+									                      currentAmount={user.wallet[key] ? user.wallet[key].amount : 0}
+									                      currentValue={user.wallet[key] ? user.wallet[key].value : 0}
+									                      currentBalance={user.balance}
                                             />
                 })
             : null : null : null}
@@ -115,13 +125,17 @@ class TableBuilder extends Component {
     super(props);
     let midDiff = props.mid - props.oldMid;
     let rowClassName = midDiff > 0 ? "rise" : midDiff < 0 ? "drop" : "noChange";
+	let numberFieldClassName = (midDiff > 0 ? "rise" : midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem");
     this.state = {
 	  midDiff: midDiff,
 	  inputDisabled: true,
 	  checkboxDisabled: false,
+	  numberField: "",
+	  valueField: "",
 	  rowClassName: rowClassName,
 	  selectClassName: rowClassName.concat(" formItem"),
-	  numberFieldClassName: (midDiff > 0 ? "rise" : midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem")
+	  numberFieldClassName: numberFieldClassName,
+	  valueFieldClassName: numberFieldClassName.concat(" valueField")
     }
   }
 
@@ -134,12 +148,49 @@ class TableBuilder extends Component {
     const { ask } = this.props;
     const { follow } = this.props;
     const { uid } = this.props;
+    const { currentAmount } = this.props;
+    const { currentValue } = this.props;
+    const { currentBalance } = this.props;
 
     var onCheckboxAction = () => {
 	  if(follow) {
 	    Firebase.database().ref("users/" + uid + "/follow/" + code).remove();
 	  } else {
 	    Firebase.database().ref("users/" + uid + "/follow/" + code).set(true);
+	  }
+	}
+
+    var onButtonAction = () => {
+	  let result;
+	  let nbField = Number.parseFloat(this.state.numberField);
+	  if(bid) {
+	    if(this.state.rowClassName === "buy") result = this.state.numberField * ask;
+	    else if(this.state.rowClassName === "sell") result = this.state.numberField * bid;
+	  } else result = this.state.numberField * mid;
+	  if(this.state.rowClassName === "buy") {
+	    if(currentBalance >= result) {
+		  let newBalance = currentBalance - result;
+		  let newAmount = currentAmount+nbField;
+		  let newValue = currentValue+result;
+		  Firebase.database().ref("users/" + uid + "/balance").set(newBalance);
+		  Firebase.database().ref("users/" + uid + "/wallet/" + code).set({amount:newAmount,value:newValue});
+		} else this.setState({valueField: "Brak funduszy"});
+	  }
+	  else if(this.state.rowClassName === "sell") {
+	    if(nbField > currentAmount) this.setState({valueField: "Nie masz tyle"});
+		// eslint-disable-next-line
+		else if(nbField == currentAmount) {
+		  let newBalance = currentBalance + result;
+		  Firebase.database().ref("users/" + uid + "/balance").set(newBalance);
+		  Firebase.database().ref("users/" + uid + "/wallet/" + code).set({amount:0,value:0});
+		}  
+		else {
+		  let newBalance = currentBalance + result;
+		  let newAmount = currentAmount-nbField;
+		  let newValue = currentValue*((currentAmount-nbField)/currentAmount);
+		  Firebase.database().ref("users/" + uid + "/balance").set(newBalance);
+		  Firebase.database().ref("users/" + uid + "/wallet/" + code).set({amount:newAmount,value:newValue});
+		}  
 	  }
 	}
 
@@ -150,7 +201,8 @@ class TableBuilder extends Component {
 		                 checkboxDisabled: false,
 						 rowClassName: this.state.midDiff > 0 ? "rise" : this.state.midDiff < 0 ? "drop" : "noChange",
 						 selectClassName: (this.state.midDiff > 0 ? "rise" : this.state.midDiff < 0 ? "drop" : "noChange").concat(" formItem"),
-						 numberFieldClassName: (this.state.midDiff > 0 ? "rise riseNumberField" : this.state.midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem")
+						 numberFieldClassName: (this.state.midDiff > 0 ? "rise riseNumberField" : this.state.midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem"),
+						 valueFieldClassName: (this.state.midDiff > 0 ? "rise riseNumberField" : this.state.midDiff < 0 ? "drop dropNumberField" : "noChange").concat(" numberField formItem valueField")
 						});
 		  break;
 		case "Buy":
@@ -158,7 +210,8 @@ class TableBuilder extends Component {
 		                 checkboxDisabled: true,
 						 rowClassName: "buy",
 						 selectClassName: "buy".concat(" formItem"),
-						 numberFieldClassName: "buy".concat(" numberField formItem")
+						 numberFieldClassName: "buy".concat(" numberField formItem"),
+						 valueFieldClassName: "buy".concat(" numberField formItem valueField")
 						});
 		  break;
 		case "Sell":
@@ -166,11 +219,30 @@ class TableBuilder extends Component {
 		                 checkboxDisabled: true,
 						 rowClassName: "sell",
 						 selectClassName: "sell".concat(" formItem"),
-						 numberFieldClassName: "sell".concat(" numberField formItem")
+						 numberFieldClassName: "sell".concat(" numberField formItem"),
+						 valueFieldClassName: "sell".concat(" numberField formItem valueField")
 						});
 		  break;
 		default:
 		  break;
+	  }
+	}
+
+    var numberFieldChange = (event) => {
+	  let result;
+	  this.setState({numberField: event.target.value});
+	  if(bid) {
+	    if(this.state.rowClassName === "buy") result = event.target.value * ask;
+	    else if(this.state.rowClassName === "sell") result = event.target.value * bid;
+	  } else result = event.target.value * mid;
+	  if(event.target.value === "") this.setState({valueField: event.target.value});
+	  else {
+	    result = result.toString();
+		let secondFractional = result.indexOf(".") + 2;
+		let firstSignificant = result.slice(secondFractional).search(/[1-9]/);
+		if(result.charAt(secondFractional-1) !== "0") result = result.slice(0, secondFractional+1);
+		else result = result.slice(0, secondFractional+firstSignificant+1);
+	    this.setState({valueField: result.concat(" PLN")});
 	  }
 	}
 
@@ -190,8 +262,9 @@ class TableBuilder extends Component {
             <option value="Sell">Sprzedaj</option>
           </select>
 		</td>
-        <td><input type="number" min="1" max="99999999" disabled={this.state.inputDisabled} className={this.state.numberFieldClassName} /></td>
-        <td>#</td>
+        <td><input type="number" min="1" max="99999999" onChange={(event) => numberFieldChange(event)} disabled={this.state.inputDisabled} className={this.state.numberFieldClassName} /></td>
+        <td><input type="text" disabled={true} className={this.state.valueFieldClassName} value={this.state.valueField} /></td>
+        <td><input type="button" value="Wykonaj" className={this.state.rowClassName} disabled={this.state.inputDisabled} onClick={() => onButtonAction()} /></td>
       </tr>
     );
   }

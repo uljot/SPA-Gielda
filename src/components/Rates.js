@@ -57,8 +57,6 @@ class Rates extends Load {
           }
         `}</style>
         <div>
-        </div>
-        <div>
           <table>
             <thead>
               <tr>
